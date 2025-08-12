@@ -1,0 +1,73 @@
+@import url('https://fonts.cdnfonts.com/css/svn-gilroy');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------Srollbar CSS------------------------ */
+body {
+  font-family: 'SVN-Gilroy', sans-serif;
+}
+
+body::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+  background-color: #fff;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #242525;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: #d3d3d3;
+  border-radius: 4px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: #b3b3b3;
+}
+
+/* ---------------------Form CSS------------------------ */
+
+.form-shadow {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Swiper Pagination Customization */
+.swiper-pagination {
+  bottom: -20px !important;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: #d1d5db;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  width: 24px;
+  border-radius: 4px;
+  background-color: #dc2626;
+}
+
+@media (max-width: 640px) {
+  .swiper-button-prev-custom,
+  .swiper-button-next-custom {
+    display: none;
+  }
+}

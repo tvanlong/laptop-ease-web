@@ -1,0 +1,148 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
+import { useContext, useEffect, useRef } from 'react'
+import { Helmet } from 'react-helmet-async'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
+import authApi from '~/apis/auth.api'
+import config from '~/constants/config'
+import { path } from '~/constants/path'
+import { AppContext } from '~/context/app.context'
+import { signInSchema } from '~/schemas/auth.schema'
+import { getRemembered, remember } from '~/utils/auth'
+
+function Login({ setProgress }) {
+  const navigate = useNavigate()
+  const rememberCheck = useRef(null)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      email: getRemembered().email,
+      password: getRemembered().password
+    },
+    resolver: yupResolver(signInSchema)
+  })
+
+  useEffect(() => {
+    setProgress(20)
+    const timeoutId = setTimeout(() => {
+      setProgress(100)
+    }, 200)
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [setProgress])
+
+  const { mutateAsync } = useMutation({
+    mutationFn: (data) => authApi.signIn(data)
+  })
+
+  const onSubmit = handleSubmit(async (data) => {
+    const toastId = toast.loading('Đang tiến hành đăng nhập...')
+    if (rememberCheck.current.checked) {
+      remember(data.email, data.password)
+    } else {
+      remember('', '')
+    }
+
+    try {
+      const res = await mutateAsync(data)
+      if (res.data.data.role === 'member') {
+        setIsAuthenticated(true)
+        setProfile(res.data.data)
+        navigate(path.home)
+        toast.success('Đăng nhập thành công', { id: toastId })
+      } else {
+        toast.error('Tài khoản của bạn không có quyền truy cập vào hệ thống', { id: toastId })
+      }
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Đăng nhập thất bại', { id: toastId })
+    }
+  })
+
+  const signInWithGoogle = () => {
+    window.open(`${config.baseURL}/api/auth/google`, '_self')
+  }
+
+  const signInWithFacebook = () => {
+    window.open(`${config.baseURL}/api/auth/facebook`, '_self')
+  }
+
+  return (
+    <div className='bg-white py-16'>
+      <Helmet>
+        <title>Đăng nhập</title>
+        <meta name='description' content='Đăng nhập' />
+      </Helmet>
+      <div className='form-shadow m-auto max-w-xs md:max-w-[600px] px-12 py-8'>
+        <h2 className='mb-7 cursor-pointer text-center text-lg font-normal uppercase'>
+          <span className='border-b-2 text-sm md:text-lg border-b-[#ed3324] px-4 py-2 text-[#ed3324]'>Đăng nhập</span>
+        </h2>
+        <form method='POST' onSubmit={onSubmit}>
+          <div className='flex flex-col gap-4'>
+            <input
+              placeholder='Email'
+              className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-xs md:text-sm text-gray-900 shadow-sm'
+              onChange={(e) => setValue('email', e.target.value)}
+              {...register('email')}
+            />
+            {errors.email && <p className='text-sm text-red-500'>{errors.email.message}</p>}
+            <input
+              type='password'
+              placeholder='Mật khẩu'
+              className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-xs md:text-sm text-gray-900 shadow-sm'
+              onChange={(e) => setValue('password', e.target.value)}
+              {...register('password')}
+            />
+            {errors.password && <p className='text-sm text-red-500'>{errors.password.message}</p>}
+          </div>
+          <div className='mt-3 flex items-center justify-between text-xs md:text-sm'>
+            <label className='flex cursor-pointer items-center'>
+              <input ref={rememberCheck} type='checkbox' className='mr-2' />
+              <span className='text-gray-500'>Ghi nhớ tài khoản</span>
+            </label>
+            <Link to={path.forgotPassword} className='text-[#ec2127] hover:underline'>
+              Quên mật khẩu?
+            </Link>
+          </div>
+          <button
+            type='submit'
+            className='mt-8 flex w-full items-center justify-center rounded-md bg-[#ec2127] p-4 hover:opacity-80'
+          >
+            <span className='text-sm md:text-xl font-medium uppercase text-white'>Đăng nhập</span>
+          </button>
+          <button
+            className='mt-8 flex w-full items-center justify-center rounded-md bg-[#ec2127] p-4 hover:opacity-80'
+            onClick={() => navigate(path.register)}
+          >
+            <span className='text-sm md:text-xl font-medium uppercase text-white'>Đăng ký</span>
+          </button>
+        </form>
+        <div className='relative flex justify-center py-6'>
+          <div className='relative z-10 flex w-40 justify-center bg-white'>Hoặc</div>
+          <div className='absolute left-1/2 top-1/2 h-[4px] w-full -translate-x-1/2 -translate-y-1/2 transform border-y border-y-[#ced4da]'></div>
+        </div>
+        <button
+          className='flex w-full items-center justify-center rounded-md bg-[#3f81f9] p-4 hover:opacity-80'
+          onClick={signInWithGoogle}
+        >
+          <img
+            className='mr-4 h-8 w-8 rounded-lg'
+            src='https://logowik.com/content/uploads/images/985_google_g_icon.jpg'
+            alt=''
+          />
+          <span className='text-sm md:text-xl font-normal uppercase text-white'>Đăng nhập bằng Google</span>
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default Login
