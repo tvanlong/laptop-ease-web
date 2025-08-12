@@ -56,6 +56,23 @@ app.use('/api', router)
 // Middleware xử lý lỗi tập trung
 app.use(errorHandlingMiddleware)
 
+// GitHub Actions Keep-Alive Workflow
+app.get('/health', (req, res) => {
+  const userAgent = req.get('User-Agent')
+
+  // Log để debug
+  if (userAgent?.includes('GitHub-Actions')) {
+    console.log(`Keep-alive ping at ${new Date().toISOString()}`)
+  }
+
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    memory: process.memoryUsage()
+  })
+})
+
 // Error handler
 if (process.env.BUILD_MODE === 'prod') {
   // Production environment

@@ -1,0 +1,67 @@
+name: Keep Render Service Alive
+
+on:
+  schedule:
+    # Chạy mỗi 14 phút
+    - cron: '*/14 * * * *'
+  
+  # Cho phép chạy manual
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Lý do chạy manual'
+        required: false
+        default: 'Manual health check'
+
+env:
+  # THAY ĐỔI URL NÀY BẰNG URL RENDER SERVICE CỦA BẠN
+  SERVICE_URL: https://laptop-ease-web.onrender.com
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+    - name: 📋 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🏥 Health Check
+      run: |
+        echo "🚀 Bắt đầu health check tại $(date)"
+        echo "🌐 URL target: $SERVICE_URL/health"
+        
+        # Retry với 3 lần thử
+        for attempt in 1 2 3; do
+          echo "📍 Lần thử $attempt/3"
+          
+          if curl -f --max-time 30 \
+               -H "User-Agent: GitHub-Actions-KeepAlive/1.0" \
+               -w "Status: %{http_code}, Time: %{time_total}s\n" \
+               "$SERVICE_URL/health"; then
+            echo "✅ Health check thành công ở lần thử $attempt"
+            exit 0
+          else
+            echo "❌ Health check thất bại ở lần thử $attempt"
+            if [ $attempt -lt 3 ]; then
+              echo "⏳ Chờ 10s trước khi thử lại..."
+              sleep 10
+            fi
+          fi
+        done
+        
+        echo "🚨 Tất cả các lần thử đều thất bại"
+        exit 1
+
+    - name: 📊 Báo cáo kết quả
+      if: always()
+      run: |
+        echo "📈 Tóm tắt:"
+        echo "- Thời gian: $(date)"
+        echo "- Service URL: $SERVICE_URL"
+        
+        if [ $? -eq 0 ]; then
+          echo "- Trạng thái: ✅ Healthy"
+        else
+          echo "- Trạng thái: ❌ Có vấn đề"
+        fi
