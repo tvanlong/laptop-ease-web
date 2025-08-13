@@ -1,8 +1,10 @@
 import { Router } from 'express'
 import versionController from '~/controllers/version.controller'
+import { cacheMiddleware } from '~/middlewares/cacheMiddleware'
 import { checkPermission } from '~/middlewares/checkPermission'
 
 const routerVersion = Router()
+routerVersion.use(cacheMiddleware('versions', 60))
 
 routerVersion.get('/', versionController.getAllVersions)
 routerVersion.get('/accessory', versionController.getAllAccessories)

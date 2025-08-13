@@ -1,8 +1,10 @@
 import { Router } from 'express'
 import productController from '~/controllers/product.controller'
+import { cacheMiddleware } from '~/middlewares/cacheMiddleware'
 import { checkPermission } from '~/middlewares/checkPermission'
 
 const routerProduct = Router()
+routerProduct.use(cacheMiddleware('products', 60))
 
 routerProduct.get('/', productController.getAllProducts)
 routerProduct.get('/:id', productController.getProductById)

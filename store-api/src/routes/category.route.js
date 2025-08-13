@@ -1,8 +1,10 @@
 import { Router } from 'express'
 import categoryController from '~/controllers/category.controller'
+import { cacheMiddleware } from '~/middlewares/cacheMiddleware'
 import { checkPermission } from '~/middlewares/checkPermission'
 
 const routerCategory = Router()
+routerCategory.use(cacheMiddleware('categories', 60))
 
 routerCategory.get('/', categoryController.getAllCategories)
 routerCategory.get('/:id', categoryController.getCategoryById)

@@ -6,13 +6,16 @@ import dotenv from 'dotenv'
 import express from 'express'
 import session from 'express-session'
 import helmet from 'helmet'
-import { connect } from 'mongoose'
 import passport from 'passport'
 import { corsOptions } from '~/configs/cors'
 import '~/configs/passport/facebook.passport'
 import '~/configs/passport/google.passport'
 import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware'
 import router from '~/routes'
+import { connectDB } from '~/db/connect'
+
+dotenv.config()
+const { APP_PORT, MONGO_ATLAS_URI } = process.env
 
 const app = express()
 app.use(cookieParser())
@@ -20,18 +23,13 @@ app.use(cookieParser())
 // MemoryStore for session storage (prevents memory leaks)
 const MemoryStore = require('memorystore')(session)
 
-// Load environment variables
-dotenv.config()
-const { APP_PORT, MONGO_ATLAS_URI } = process.env
 // Connect to MongoDB
-connect(MONGO_ATLAS_URI)
-  .then(() => console.log(chalk.greenBright('MongoDB connected')))
-  .catch((err) => console.log(chalk.redBright(err)))
+connectDB(MONGO_ATLAS_URI)
 
 // Middleware
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
-app.use(cors(corsOptions)) // Enable CORS
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -42,7 +40,7 @@ app.use(
     resave: false,
     store: new MemoryStore({ checkPeriod: 86400000 }),
     saveUninitialized: true,
-    cookie: { secure: process.env.BUILD_MODE === 'prod' ? true : false } // Set to true if using HTTPS
+    cookie: { secure: process.env.BUILD_MODE === 'prod' ? true : false }
   })
 )
 
@@ -59,8 +57,6 @@ app.use(errorHandlingMiddleware)
 // GitHub Actions Keep-Alive Workflow
 app.get('/health', (req, res) => {
   const userAgent = req.get('User-Agent')
-
-  // Log để debug
   if (userAgent?.includes('GitHub-Actions')) {
     console.log(`Keep-alive ping at ${new Date().toISOString()}`)
   }
@@ -73,14 +69,12 @@ app.get('/health', (req, res) => {
   })
 })
 
-// Error handler
+// Error handler (production || development)
 if (process.env.BUILD_MODE === 'prod') {
-  // Production environment
   app.listen(process.env.PORT, () => {
     console.log(chalk.greenBright(`Production: Server is running at Port:${process.env.PORT}`))
   })
 } else {
-  // Development environment
   app.listen(APP_PORT, () => {
     console.log(chalk.greenBright(`Local Dev: Server is running at http://localhost:${APP_PORT}`))
   })
