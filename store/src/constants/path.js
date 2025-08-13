@@ -9,6 +9,7 @@ export const path = {
   cart: '/cart',
   checkout: '/checkout',
   search: '/search',
+  comparison: '/comparison',
   profile: '/profile',
   changePassword: '/change-password',
   changeEmail: '/change-email',

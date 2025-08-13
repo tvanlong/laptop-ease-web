@@ -1,4 +1,4 @@
-import http from '~/utils/http'
+import http from '@/utils/http'
 
 const userApi = {
   getProfile: (id) => http.get(`/api/users/customers/${id}`),

@@ -4,12 +4,12 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import otpApi from '~/apis/otp.api'
-import Navbar from '~/components/Navbar'
-import { AppContext } from '~/context/app.context'
-import { useProfile } from '~/hooks/useProfile'
-import { changeEmailSchema } from '~/schemas/user.schema'
-import { setProfileToLS } from '~/utils/auth'
+import otpApi from '@/apis/otp.api'
+import Navbar from '@/components/Navbar'
+import { AppContext } from '@/contexts/AppContext'
+import { useProfile } from '@/hooks/useProfile'
+import { changeEmailSchema } from '@/schemas/user.schema'
+import { setProfileToLS } from '@/utils/auth'
 
 function ChangeEmail({ setProgress }) {
   const queryClient = useQueryClient()

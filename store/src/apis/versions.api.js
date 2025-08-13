@@ -1,4 +1,4 @@
-import http from '~/utils/http'
+import http from '@/utils/http'
 
 const versionsApi = {
   getAllVersions: (params) => http.get('/api/versions', { params }),

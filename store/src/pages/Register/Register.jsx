@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import authApi from '~/apis/auth.api'
-import { signUpSchema } from '~/schemas/auth.schema'
+import authApi from '@/apis/auth.api'
+import { signUpSchema } from '@/schemas/auth.schema'
 
 function Register({ setProgress }) {
   const {

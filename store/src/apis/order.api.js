@@ -1,4 +1,4 @@
-import http from '~/utils/http'
+import http from '@/utils/http'
 
 const orderApi = {
   createOrderCheckout: (id, data) => http.post(`/api/orders/${id}`, data),

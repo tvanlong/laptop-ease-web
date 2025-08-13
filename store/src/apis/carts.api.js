@@ -1,4 +1,4 @@
-import http from '~/utils/http'
+import http from '@/utils/http'
 
 const cartApi = {
   addToCart: (userId, data) => http.post(`/api/carts/${userId}`, data),

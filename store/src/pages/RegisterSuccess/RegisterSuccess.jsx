@@ -2,8 +2,8 @@ import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import authApi from '~/apis/auth.api'
-import { path } from '~/constants/path'
+import authApi from '@/apis/auth.api'
+import { path } from '@/constants/path'
 
 function RegisterSuccess() {
   const { token } = useParams()

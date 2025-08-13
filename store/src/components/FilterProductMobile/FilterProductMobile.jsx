@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { cpuOptions, memoryOptions, priceOptions, ramOptions, screenSizeOptions, vgaOptions } from '~/constants/options'
+import { cpuOptions, memoryOptions, priceOptions, ramOptions, screenSizeOptions, vgaOptions } from '@/constants/options'
 import FilterOption from './FilterOption'
 
 function FilterProductMobile({ queryParamsConfig }) {

@@ -5,12 +5,12 @@ import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import authApi from '~/apis/auth.api'
-import config from '~/constants/config'
-import { path } from '~/constants/path'
-import { AppContext } from '~/context/app.context'
-import { signInSchema } from '~/schemas/auth.schema'
-import { getRemembered, remember } from '~/utils/auth'
+import authApi from '@/apis/auth.api'
+import config from '@/constants/config'
+import { path } from '@/constants/path'
+import { AppContext } from '@/contexts/AppContext'
+import { signInSchema } from '@/schemas/auth.schema'
+import { getRemembered, remember } from '@/utils/auth'
 
 function Login({ setProgress }) {
   const navigate = useNavigate()

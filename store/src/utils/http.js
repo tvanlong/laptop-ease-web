@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { toast } from 'sonner'
-import config from '~/constants/config'
+import config from '@/constants/config'
 import {
   clearLS,
   getAccessTokenFromLS,
@@ -8,7 +8,7 @@ import {
   setAccessTokenToLS,
   setProfileToLS,
   setRefreshTokenToLS
-} from '~/utils/auth'
+} from '@/utils/auth'
 
 /*
 - Áp dụng Singleton Pattern để tạo một instance duy nhất của Http class

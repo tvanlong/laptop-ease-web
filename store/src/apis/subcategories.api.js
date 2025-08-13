@@ -1,4 +1,4 @@
-import http from '~/utils/http'
+import http from '@/utils/http'
 
 const subcategoriesApi = {
   getAllSubcategories: () => http.get('/api/subcategories'),

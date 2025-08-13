@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
-import { AppProvider } from './context/app.context.jsx'
+import { AppProvider } from './contexts/AppContext.jsx'
 import './index.css'
 
 const queryClient = new QueryClient({

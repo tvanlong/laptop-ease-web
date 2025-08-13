@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { calculateTimeLeft } from '~/utils/util'
+import { calculateTimeLeft } from '@/utils/util'
 
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState(() => {

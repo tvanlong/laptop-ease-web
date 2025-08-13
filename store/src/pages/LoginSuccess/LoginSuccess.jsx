@@ -3,9 +3,9 @@ import { useContext } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import authApi from '~/apis/auth.api'
-import { path } from '~/constants/path'
-import { AppContext } from '~/context/app.context'
+import authApi from '@/apis/auth.api'
+import { path } from '@/constants/path'
+import { AppContext } from '@/contexts/AppContext'
 
 function LoginSuccess() {
   const { userId } = useParams()

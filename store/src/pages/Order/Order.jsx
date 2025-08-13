@@ -3,12 +3,12 @@ import { useContext, useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import orderApi from '~/apis/order.api'
-import Navbar from '~/components/Navbar'
-import { AppContext } from '~/context/app.context'
-import { useProfile } from '~/hooks/useProfile'
-import { formatCurrency } from '~/utils/format'
-import { generateNameId } from '~/utils/util'
+import orderApi from '@/apis/order.api'
+import Navbar from '@/components/Navbar'
+import { AppContext } from '@/contexts/AppContext'
+import { useProfile } from '@/hooks/useProfile'
+import { formatCurrency } from '@/utils/format'
+import { generateNameId } from '@/utils/util'
 
 function Order({ setProgress }) {
   const { profile } = useContext(AppContext)

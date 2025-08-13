@@ -2,8 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import PropTypes from 'prop-types'
 import { useContext, useState } from 'react'
 import { toast } from 'sonner'
-import cartApi from '~/apis/carts.api'
-import { AppContext } from '~/context/app.context'
+import cartApi from '@/apis/carts.api'
+import { AppContext } from '@/contexts/AppContext'
 
 function InputQuantity({ item }) {
   const { profile } = useContext(AppContext)

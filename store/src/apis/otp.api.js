@@ -1,4 +1,4 @@
-import http from '~/utils/http'
+import http from '@/utils/http'
 
 const otpApi = {
   changeEmail: (id, data) => http.post(`/api/otps/change-email/${id}`, data),

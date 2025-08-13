@@ -1,4 +1,4 @@
-import http from '~/utils/http'
+import http from '@/utils/http'
 
 const authApi = {
   signIn: (data) => http.post('/api/auth/signin', data),

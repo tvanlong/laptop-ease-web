@@ -1,5 +1,5 @@
-import Footer from '~/components/Footer'
-import SubHeader from '~/components/SubHeader'
+import Footer from '@/components/Footer'
+import SubHeader from '@/components/SubHeader'
 
 function MainLayout({ children }) {
   return (

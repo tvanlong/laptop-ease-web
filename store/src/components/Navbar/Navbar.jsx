@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
-import { path } from '~/constants/path'
+import { path } from '@/constants/path'
 
 function Navbar({ user }) {
   return (

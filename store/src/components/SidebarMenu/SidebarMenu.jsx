@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useContext, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import categoriesApi from '~/apis/categories.api'
-import { AppContext } from '~/context/app.context'
+import categoriesApi from '@/apis/categories.api'
+import { AppContext } from '@/contexts/AppContext'
 
 function SidebarMenu() {
   const { isOpenSidebarMenu, setIsOpenSidebarMenu } = useContext(AppContext)

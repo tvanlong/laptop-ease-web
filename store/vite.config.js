@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: [{ find: '~', replacement: '/src' }]
+    alias: [{ find: '@', replacement: '/src' }]
   },
   define: {
     // Cho phép truy cập biến môi trường trong code

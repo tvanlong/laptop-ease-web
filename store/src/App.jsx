@@ -1,9 +1,11 @@
 import { useContext, useEffect } from 'react'
 import { Toaster } from 'sonner'
-import ScrollToTop from '~/components/ScrollToTop'
-import { AppContext } from '~/context/app.context'
-import Routes from '~/routes/Routes'
-import { LocalStorageEventTarget } from '~/utils/auth'
+import ScrollToTop from '@/components/ScrollToTop'
+import { AppContext } from '@/contexts/AppContext'
+import Routes from '@/routes/Routes'
+import { LocalStorageEventTarget } from '@/utils/auth'
+import { ComparisonProvider } from '@/contexts/ComparisonContext'
+import ComparisonBar from '@/components/ComparisonBar'
 
 function App() {
   const { reset } = useContext(AppContext)
@@ -16,9 +18,12 @@ function App() {
 
   return (
     <>
-      <ScrollToTop />
-      <Routes />
-      <Toaster richColors />
+      <ComparisonProvider>
+        <ScrollToTop />
+        <Routes />
+        <ComparisonBar />
+        <Toaster richColors />
+      </ComparisonProvider>
     </>
   )
 }

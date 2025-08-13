@@ -4,18 +4,20 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import cartApi from '~/apis/carts.api'
-import productsApi from '~/apis/products.api'
-import versionsApi from '~/apis/versions.api'
-import Loading from '~/components/Loading'
-import { AppContext } from '~/context/app.context'
-import { formatCurrency } from '~/utils/format'
-import { generateNameId, getIdFromNameId } from '~/utils/util'
+import cartApi from '@/apis/carts.api'
+import productsApi from '@/apis/products.api'
+import versionsApi from '@/apis/versions.api'
+import Loading from '@/components/Loading'
+import { AppContext } from '@/contexts/AppContext'
+import { formatCurrency } from '@/utils/format'
+import { generateNameId, getIdFromNameId } from '@/utils/util'
 import ProductDetailModal from './ProductDetailModal'
 import ImageGalleryModal from './ImageGalleryModal'
+import { ComparisonContext } from '@/contexts/ComparisonContext'
 
 function Product({ setProgress }) {
   const { isAuthenticated, profile } = useContext(AppContext)
+  const { addToComparison, removeFromComparison, isInComparison } = useContext(ComparisonContext)
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [showGalleryModal, setShowGalleryModal] = useState(false)
   const queryClient = useQueryClient()
@@ -31,6 +33,7 @@ function Product({ setProgress }) {
     enabled: !!versionId
   })
   const version = useMemo(() => versionData?.data?.data || {}, [versionData])
+  const inComparison = useMemo(() => isInComparison(version._id), [isInComparison, version._id])
 
   const { data: productData } = useQuery({
     queryKey: ['product', version?.product?._id],
@@ -73,6 +76,26 @@ function Product({ setProgress }) {
       },
       error: 'Thêm sản phẩm vào giỏ hàng thất bại'
     })
+  }
+
+  const handleCompareClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (inComparison) {
+      removeFromComparison(version._id)
+    } else {
+      addToComparison({
+        _id: version._id,
+        name: `${version.product.name} (${version.name})`,
+        image: version.product.images[0],
+        current_price: version.current_price,
+        old_price: version.old_price,
+        description: version.description,
+        product: version.product,
+        version: version.name
+      })
+    }
   }
 
   if (isLoading || isFetching) return <Loading />
@@ -273,34 +296,58 @@ function Product({ setProgress }) {
               productName={version?.product?.name}
             />
             <div className='mx-3 border-r'></div>
-            <div className='text-sm text-green-700 underline cursor-pointer'>So sánh</div>
+            <div className='text-sm text-green-700 underline cursor-pointer' onClick={handleCompareClick}>{inComparison ? 'Bỏ so sánh' : 'So sánh'}</div>
           </div>
           <h3 className='my-5 text-xl font-semibold'>Tùy chọn cấu hình</h3>
-          <div className='grid grid-cols-2 gap-3'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4'>
             {product?.versions?.map((version, index) => (
               <div
-                key={index}
-                className={
-                  versionId === version._id
-                    ? 'rounded-lg border border-green-600 bg-[#ebfff7] p-3'
-                    : 'rounded-lg border border-gray-300 bg-white p-3 hover:border-green-600 hover:bg-[#ebfff7]'
-                }
+                key={version._id || index}
+                className={`
+                  group relative overflow-hidden border transition-all duration-300 ease-in-out
+                  ${versionId === version._id
+                ? 'border-green-500 bg-green-50 shadow-md'
+                : 'border-gray-200 bg-white hover:border-green-400 hover:bg-green-50/50 hover:shadow-lg'
+              }
+                `}
               >
                 <Link
                   to={`/product/${generateNameId({
                     name: `${product.name} ${version.name}`,
                     id: version._id
                   })}`}
+                  className='block p-3 sm:p-4 h-full'
+                  aria-label={`Select ${version.name} version`}
                 >
-                  <div className='mb-2 text-xs lg:text-sm'>{version?.name}</div>
-                  <div className='flex'>
-                    <div className='mr-3 text-xs lg:text-sm font-semibold'>
-                      {formatCurrency(version.current_price)} đ
+                  {versionId === version._id && (
+                    <div className='absolute -top-1 -right-1 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-bl-lg rounded-tr-xl shadow-sm'>
+                      Đang chọn
                     </div>
-                    <div className='text-xs lg:text-sm font-semibold line-through opacity-60'>
-                      {formatCurrency(version.old_price)} đ
-                    </div>
+                  )}
+                  <div className='mb-3 font-medium text-gray-800 text-sm line-clamp-2'>
+                    {version?.name}
                   </div>
+                  <div className='space-y-2'>
+                    <div className='text-red-600 font-bold text-base sm:text-lg lg:text-xl'>
+                      {formatCurrency(version.current_price)}
+                      <span className='text-sm font-normal text-red-600 ml-1'>đ</span>
+                    </div>
+                    {version.old_price && version.old_price > version.current_price && (
+                      <div className='flex items-center gap-2 flex-wrap'>
+                        <div className='text-gray-500 text-xs sm:text-sm line-through'>
+                          {formatCurrency(version.old_price)} đ
+                        </div>
+                        <div className='bg-red-100 text-red-600 text-xs font-semibold px-2 py-1 rounded-full'>
+                          -{Math.round(((version.old_price - version.current_price) / version.old_price) * 100)}%
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className={`
+                    absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-green-600 
+                    transition-transform duration-300 ease-in-out
+                    ${versionId === version._id ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
+                  `} />
                 </Link>
               </div>
             ))}
