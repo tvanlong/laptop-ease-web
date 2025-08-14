@@ -3,6 +3,51 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Bounce animation for chat button */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce 2s infinite;
+}
+
+/* Slide animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.chat-window-enter {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.chat-window-exit {
+  animation: slideOutRight 0.3s ease-out;
+}
+
 /* ---------------------Srollbar CSS------------------------ */
 body {
   font-family: 'SVN-Gilroy', sans-serif;

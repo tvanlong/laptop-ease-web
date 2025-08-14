@@ -10,6 +10,7 @@ import routerSubcategory from './subcategory.route'
 import routerImages from './upload.route'
 import routerUser from './user.route'
 import routerVersion from './version.route'
+import routerAI from './ai.routes'
 
 const router = Router()
 
@@ -24,5 +25,6 @@ router.use('/users', routerUser)
 router.use('/auth', routerAuth)
 router.use('/payment', routerPayment)
 router.use('/otps', routerOTP)
+router.use('/ai-search', routerAI)
 
 export default router

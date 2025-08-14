@@ -6,6 +6,7 @@ import Routes from '@/routes/Routes'
 import { LocalStorageEventTarget } from '@/utils/auth'
 import { ComparisonProvider } from '@/contexts/ComparisonContext'
 import ComparisonBar from '@/components/ComparisonBar'
+import ChatWidget from '@/components/ChatWidget'
 
 function App() {
   const { reset } = useContext(AppContext)
@@ -22,6 +23,7 @@ function App() {
         <ScrollToTop />
         <Routes />
         <ComparisonBar />
+        <ChatWidget />
         <Toaster richColors />
       </ComparisonProvider>
     </>
