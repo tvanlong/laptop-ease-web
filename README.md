@@ -1,7 +1,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/tvanlong/laptop-ease-web">
-    <img src="store/src/assets/images/logo_header.png"  style="background-color:black;border-radius: 50%" alt="Logo" width="80" height="80">
+    <img src="docs/logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Laptop Ease</h3>
@@ -67,13 +67,12 @@ Laptop Ease is a comprehensive e-commerce platform specifically designed for lap
 - **Product Catalog**: Extensive laptop database with detailed specifications
 - **Advanced Search & Filtering**: Filter by brand, price range, specifications, and user ratings
 - **Product Comparison**: Side-by-side comparison of multiple laptops
-- **User Reviews & Ratings**: Community-driven reviews and rating system (Coming soon...)
 - **Shopping Cart & Wishlist**: Save items for later and manage purchases
 - **Secure Checkout**: Multiple payment options with secure processing
 - **User Accounts**: Profile management, order history, and preferences
+- **Compare Multiple Products**: Side-by-side comparison of multiple laptops
 - **Admin Dashboard**: Inventory management, order processing, and analytics
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Real-time Notifications**: Order updates and promotional alerts (Coming soon...)
 
 <a name="installation"></a>
 
